@@ -5,6 +5,11 @@ LDLIBS=$(shell sdl2-config --libs) -lGLEW $(EXTRA_LDLIBS)
 EXTRA_LDLIBS?=-lGL
 
 # triangle: ../common-sdl2/shader_utils.o
+#main: main.o
+#main.o: triangle.cpp common/shader.hpp
+
+app: triangle common/shader.hpp
+#cc -o app triangle.cpp
 
 all: triangle
 test: triangle
