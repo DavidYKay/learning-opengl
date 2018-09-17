@@ -11,13 +11,16 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "../common/shader_utils.h"
+//#include "../common/shader_utils.h"
 
 using namespace std;
 using namespace glm;
 
 GLuint64 program;
-GLint64 attribute_coord2d;
+GLuint vbo_triangle, vbo_triangle_colors;
+GLint attribute_coord2d, attribute_v_color;
+
+
 
 /**
  * Display compilation errors from the OpenGL shader compiler
@@ -103,6 +106,15 @@ GLuint create_shader(const char* filename, GLenum type) {
 }
 
 bool init_resources(void) {
+  GLfloat triangle_colors[] = {
+                               1.0, 1.0, 0.0,
+                               0.0, 0.0, 1.0,
+                               1.0, 0.0, 0.0,
+  };
+  glGenBuffers(1, &vbo_triangle_colors);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle_colors);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(triangle_colors), triangle_colors, GL_STATIC_DRAW);
+
   GLint compile_ok = GL_FALSE, link_ok = GL_FALSE;
 
   GLuint vs, fs;
@@ -119,6 +131,15 @@ bool init_resources(void) {
     return false;
   }
 
+
+  //const std::string attribute_name = "v_color";
+  const GLchar * attribute_name = "v_color";
+  attribute_v_color = glGetAttribLocation(program, attribute_name);
+  if (attribute_v_color == -1) {
+    cerr << "Could not bind attribute " << attribute_name << endl;
+    return false;
+  }
+
   return true;
 }
 
@@ -128,6 +149,18 @@ void render(SDL_Window* window) {
   glClear(GL_COLOR_BUFFER_BIT);
 
   glUseProgram(program);
+
+  glEnableVertexAttribArray(attribute_v_color);
+  glBindBuffer(GL_ARRAY_BUFFER, vbo_triangle_colors);
+  glVertexAttribPointer(
+                        attribute_v_color, // attribute
+                        3,                 // number of elements per vertex, here (r,g,b)
+                        GL_FLOAT,          // the type of each element
+                        GL_FALSE,          // take our values as-is
+                        0,                 // no extra data between each position
+                        0                  // offset of first element
+                        );
+
   glEnableVertexAttribArray(attribute_coord2d);
   GLfloat triangle_vertices[] = {
                                  0.0,  0.8,
@@ -147,6 +180,7 @@ void render(SDL_Window* window) {
   /* Push each element in buffer_vertices to the vertex shader */
   glDrawArrays(GL_TRIANGLES, 0, 3);
 
+  glDisableVertexAttribArray(attribute_v_color);
   glDisableVertexAttribArray(attribute_coord2d);
 
   /* Display the result */

@@ -15,6 +15,8 @@ layout(location = 0) in vec3 vertexPosition_modelspace;
 
 // Values that stay constant for the whole mesh.
 uniform mat4 MVP;
+attribute vec3 v_color;
+varying vec3 f_color;
 
 void main(){
   // Our main function will merely set the vertex’ position to whatever was in the buffer. So if we gave (1,1), the triangle would have one of its vertices at the top right corner of the screen. We’ll see in the next tutorial how to do some more interesting computations on the input position.
@@ -22,4 +24,5 @@ void main(){
   // gl_Position.w = 1.0;
 
   gl_Position =  MVP * vec4(vertexPosition_modelspace,1);
+  f_color = v_color;
 }
