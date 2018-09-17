@@ -1,15 +1,18 @@
-
-EXTRA_CPPFLAGS =-g
-CPPFLAGS=$(shell sdl2-config --cflags) $(EXTRA_CPPFLAGS)
+EXTRA_CPPFLAGS =-g -I/usr/local/include/GLFW -Icommon
+#EXTRA_LDLIBS?=-lGL
+EXTRA_LDLIBS?=`pkg-config --static --libs glew glfw3`
+CPPFLAGS=$(shell sdl2-config --cflags) $(shell pkg-config --static --libs glew glfw3) $(EXTRA_CPPFLAGS)
 LDLIBS=$(shell sdl2-config --libs) -lGLEW $(EXTRA_LDLIBS)
-EXTRA_LDLIBS?=-lGL
 
 # triangle: ../common-sdl2/shader_utils.o
 #main: main.o
 #main.o: triangle.cpp common/shader.hpp
 
-app: triangle common/shader.hpp
 #cc -o app triangle.cpp
+
+• gcc –Wall –c main.c
+• gcc –Wall –c stack.c
+• gcc –Wall –o stacktest stack.o main.o
 
 all: triangle
 test: triangle
