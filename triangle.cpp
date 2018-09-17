@@ -106,8 +106,8 @@ bool init_resources(void) {
   GLint compile_ok = GL_FALSE, link_ok = GL_FALSE;
 
   GLuint vs, fs;
-	if ((vs = create_shader("shaders/triangle.v.glsl", GL_VERTEX_SHADER))   == 0) return false;
-	if ((fs = create_shader("shaders/triangle.f.glsl", GL_FRAGMENT_SHADER)) == 0) return false;
+	if ((vs = create_shader("shaders/vertex.glsl", GL_VERTEX_SHADER))   == 0) return false;
+	if ((fs = create_shader("shaders/fragment.glsl", GL_FRAGMENT_SHADER)) == 0) return false;
 
   program = glCreateProgram();
   glAttachShader(program, vs);
