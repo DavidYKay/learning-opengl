@@ -1,13 +1,20 @@
 /* Using standard C++ output libraries */
 #include <cstdlib>
 #include <iostream>
-using namespace std;
 
 /* Use glew.h instead of gl.h to get all the GL prototypes declared */
 #include <GL/glew.h>
 /* Using SDL2 for the base window and OpenGL context init */
 #include <SDL.h>
-/* ADD GLOBAL VARIABLES HERE LATER */
+
+// Include GLM
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+
+#include "../common/shader_utils.h"
+
+using namespace std;
+using namespace glm;
 
 GLuint64 program;
 GLint64 attribute_coord2d;
@@ -95,14 +102,12 @@ GLuint create_shader(const char* filename, GLenum type) {
 	return res;
 }
 
-
-
 bool init_resources(void) {
   GLint compile_ok = GL_FALSE, link_ok = GL_FALSE;
 
   GLuint vs, fs;
-	if ((vs = create_shader("triangle.v.glsl", GL_VERTEX_SHADER))   == 0) return false;
-	if ((fs = create_shader("triangle.f.glsl", GL_FRAGMENT_SHADER)) == 0) return false;
+	if ((vs = create_shader("shaders/triangle.v.glsl", GL_VERTEX_SHADER))   == 0) return false;
+	if ((fs = create_shader("shaders/triangle.f.glsl", GL_FRAGMENT_SHADER)) == 0) return false;
 
   program = glCreateProgram();
   glAttachShader(program, vs);
@@ -113,7 +118,6 @@ bool init_resources(void) {
     cerr << "Error in glLinkProgram" << endl;
     return false;
   }
-
 
   return true;
 }
