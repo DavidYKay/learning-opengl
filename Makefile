@@ -8,15 +8,36 @@ LDLIBS=$(shell sdl2-config --libs) -lGLEW $(EXTRA_LDLIBS)
 #main: main.o
 #main.o: triangle.cpp common/shader.hpp
 
+myprogram: triangle.o shader.o
+		g++ -o myprogram $(CPPFLAGS) $(EXTRA_CPPFLAGS) $(LDLIBS) triangle.o shader.o
+
+shader.o : common/shader.cpp common/shader.hpp
+		g++ -c common/shader.cpp
+
+triangle.o : shader.o triangle.cpp
+		g++ -c triangle.cpp  
+
+
+#main: triangle.o shader.o
+
+#main: shader.o triangle.o
 #cc -o app triangle.cpp
 
-• gcc –Wall –c main.c
-• gcc –Wall –c stack.c
-• gcc –Wall –o stacktest stack.o main.o
+#CC = g++
+#CFLAGS = -Wall
+#LDFLAGS =
+#OBJFILES = common/shader.o triangle.o
+#TARGET = stacktest
+#all: $(TARGET)
+#$(TARGET): $(OBJFILES)
+#$(CC) $(CFLAGS) -o $(TARGET) $(OBJFILES) $(LDFLAGS)
+#clean:
+#rm -f $(OBJFILES) $(TARGET) *~
 
-all: triangle
-test: triangle
-		./triangle
+
+# all: triangle
+# test: triangle
+# 		./triangle
 clean:
 	rm -f *.o triangle
-.PHONY: all clean
+# .PHONY: all clean
