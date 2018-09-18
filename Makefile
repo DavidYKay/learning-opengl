@@ -1,21 +1,12 @@
-EXTRA_CPPFLAGS =-g -I/usr/local/include/GLFW -Icommon
-#EXTRA_LDLIBS?=-lGL
-EXTRA_LDLIBS?=`pkg-config --static --libs glew glfw3`
-CPPFLAGS=$(shell sdl2-config --cflags) $(shell pkg-config --static --libs glew glfw3) $(EXTRA_CPPFLAGS)
-LDLIBS=$(shell sdl2-config --libs) -lGLEW $(EXTRA_LDLIBS)
+CPPFLAGS=$(shell sdl2-config --cflags) -g -I/usr/local/include/GLFW -Icommon 
+LDLIBS=$(shell sdl2-config --libs) -lGLEW -lglfw3 -L/usr/local/lib -lGLEW -lGLU -lm -lGL -lm -lpthread -pthread -ldl -ldrm -lXdamage -lX11-xcb -lxcb-glx -lxcb-dri2 -lglfw3 -lrt -lm -ldl -lXrandr -lXinerama -lXxf86vm -lXext -lXcursor -lXrender -lXfixes -lX11 -lpthread -lxcb -lXau -lXdmcp
 
 # triangle: ../common-sdl2/shader_utils.o
 #main: main.o
 #main.o: triangle.cpp common/shader.hpp
 
-myprogram: triangle.o shader.o
-		g++ -o myprogram $(CPPFLAGS) $(EXTRA_CPPFLAGS) $(LDLIBS) triangle.o shader.o
-
-shader.o : common/shader.cpp common/shader.hpp
-		g++ -c common/shader.cpp
-
-triangle.o : shader.o triangle.cpp
-		g++ -c triangle.cpp  
+myprogram:
+		g++ -o myprogram $(CPPFLAGS) $(LDLIBS) triangle.cpp common/shader.cpp
 
 
 #main: triangle.o shader.o
@@ -39,5 +30,5 @@ triangle.o : shader.o triangle.cpp
 # test: triangle
 # 		./triangle
 clean:
-	rm -f *.o triangle
+	rm -f *.o myprogram
 # .PHONY: all clean
